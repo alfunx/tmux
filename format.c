@@ -980,20 +980,21 @@ format_replace(struct format_tree *ft, const char *key, size_t keylen,
 		copy += 2;
 		break;
 	case 's':
-		if (copy[1] != '/')
+		if (copy[1] != '/' && copy[1] != '@')
 			break;
+		char delim = copy[1];
 		from = copy + 2;
-		for (copy = from; *copy != '\0' && *copy != '/'; copy++)
+		for (copy = from; *copy != '\0' && *copy != delim; copy++)
 			/* nothing */;
-		if (copy[0] != '/' || copy == from) {
+		if (copy[0] != delim || copy == from) {
 			copy = copy0;
 			break;
 		}
 		copy[0] = '\0';
 		to = copy + 1;
-		for (copy = to; *copy != '\0' && *copy != '/'; copy++)
+		for (copy = to; *copy != '\0' && *copy != delim; copy++)
 			/* nothing */;
-		if (copy[0] != '/' || copy[1] != ':') {
+		if (copy[0] != delim || copy[1] != ':') {
 			copy = copy0;
 			break;
 		}
